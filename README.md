@@ -1,6 +1,6 @@
 <p align="center">
    <img src="./images/owen-wilson/owen-logo-words.png" width=60%>
-   <img src="./src/components/landing-page/logo/owen-face-with-border-small.png" width=20% >
+   <img src="./images/owen-wilson/owen-face-with-border.png" width=20% >
    <span><i>Wowww!</i></span>
 </p>
 
