@@ -19,7 +19,6 @@ export function registerUser (username, password) {
   })
   .then(res => res.json())
   .then(response => {
-    console.log('Successful register fetch!', response)
     if (response.userId) {
       return fetchLogin(username, password)
     } else if (response.error) {

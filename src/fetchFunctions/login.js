@@ -16,7 +16,6 @@ export function fetchLogin (username, password) {
   })
   .then(res => res.json())
   .then(response => {
-    console.log('Successful Login fetch!', response)
     if (response.webToken) {
       return Promise.resolve(response)
     } else if (response.error) {

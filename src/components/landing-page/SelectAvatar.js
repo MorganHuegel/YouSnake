@@ -20,7 +20,7 @@ export function SelectAvatar(props){
     },
     selectButtonText: {
       color: 'rgb(0, 0, 0)',
-      textDecorationLine: 'underline' // <------ update this when you have internet
+      textDecorationLine: 'underline'
     },
     picker: {
     },

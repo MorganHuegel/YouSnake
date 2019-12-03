@@ -131,7 +131,6 @@ export default class App extends React.Component {
         screenPaddingY={stylesApp.container.paddingVertical}
       /> 
     } else {
-      console.log('rendering Landing Page: ', this.state)
       component = <LandingMain setToPlaying={this.setToPlaying} setLoggedIn={this.setLoggedIn}/>
     }
     

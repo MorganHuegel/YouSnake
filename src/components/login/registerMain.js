@@ -128,7 +128,6 @@ export class RegisterMain extends React.Component {
       if (this.state.registering) {
         return registerUser(this.state.usernameText, this.state.passwordText)
           .then(response => {
-            console.log('response in registerMain: ', response)
             return this.props.setLoggedIn(true, response.webToken, response.userData.avatar)
           })
           .catch(errorMessage => {
