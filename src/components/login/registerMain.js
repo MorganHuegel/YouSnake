@@ -15,7 +15,6 @@ export class RegisterMain extends React.Component {
     this.state = {
       usernameText: '',
       usernameErrorMessage: '',
-      verifiedUsernameAvailable: false,
       passwordText: '',
       passwordErrorMessage: '',
       isFetching: false,
@@ -128,8 +127,9 @@ export class RegisterMain extends React.Component {
     }, () => {
       if (this.state.registering) {
         return registerUser(this.state.usernameText, this.state.passwordText)
-          .then(webToken => {
-            return this.props.setLoggedIn(true, webToken)
+          .then(response => {
+            console.log('response in registerMain: ', response)
+            return this.props.setLoggedIn(true, response.webToken, response.userData.avatar)
           })
           .catch(errorMessage => {
             // errorMessage should be a string, but it might be an Error object
@@ -157,7 +157,11 @@ export class RegisterMain extends React.Component {
 
   toggleRegisteringState = (bool) => {
     this.setState({
-      registering: bool
+      registering: bool,
+      usernameErrorMessage: '',
+      passwordErrorMessage: '',
+      isFetching: false,
+      fetchErrorMessage: '',
     })
   }
 

@@ -20,7 +20,7 @@ export function SelectAvatar(props){
     },
     selectButtonText: {
       color: 'rgb(0, 0, 0)',
-      textDecoration: 'underline' // <------ update this when you have internet
+      textDecorationLine: 'underline' // <------ update this when you have internet
     },
     picker: {
     },
@@ -47,10 +47,16 @@ export function SelectAvatar(props){
               selectedValue={avatar}
               style={selectAvatarStyles.picker}
               onValueChange={newAvatar => {
+                let oldAvatar = avatar
+                setAvatar(newAvatar)
+
                 return AsyncStorage.getItem('@webToken')
                   .then(webToken => changeAvatar(webToken, newAvatar))
                   .then(updatedUser => setAvatar(updatedUser.avatar))
-                  .catch(e => console.log('Probably should error handle here in SelectAvatar component: ' + e))
+                  .catch(e => {
+                    setAvatar(oldAvatar)
+                    console.log('Probably should error handle here in SelectAvatar component: ' + e)
+                  })
               }}
               itemStyle={selectAvatarStyles.items}
             >
