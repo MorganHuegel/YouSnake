@@ -100,13 +100,13 @@ export class RegisterMain extends React.Component {
 
 
   onBlurUsername = (event) => {
-    this.onChangeUsernameText(event.nativeEvent.text)
+    this.onChangeUsernameText(this.state.usernameText)
   }
   
 
 
   onBlurPassword = (event) => {
-    this.onChangePasswordText(event.nativeEvent.text)
+    this.onChangePasswordText(this.state.passwordText)
   }
 
 
