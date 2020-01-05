@@ -105,7 +105,8 @@ export class GameplayMain extends React.Component {
     Animated.timing(this.state.viewOpacity, {
       toValue: 1,
       duration: 1000,
-      easing: Easing.linear
+      easing: Easing.linear,
+      useNativeDriver: true
     }).start()
   }
 
@@ -116,7 +117,8 @@ export class GameplayMain extends React.Component {
       Animated.timing(this.state.viewOpacity, {
         toValue: 0,
         duration: this.props.fadeOutGameplayTime,
-        easing: Easing.linear
+        easing: Easing.linear,
+        useNativeDriver: true
       }).start()
     }
   }
