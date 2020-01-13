@@ -22,7 +22,7 @@ export default class App extends React.Component {
   }
 
 
-  fadeOutGameplayTime = 600
+  fadeOutGameplayTime = 500
 
   backToLanding = () => {
     this.setState({fadingOutGameplay: true}, () => {

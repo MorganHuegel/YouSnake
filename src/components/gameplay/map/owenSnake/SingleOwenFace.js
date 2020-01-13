@@ -8,8 +8,10 @@ export function SingleOwenFace(props){
       width: props.characterDimensions.characterWidth,
       height: props.characterDimensions.characterHeight,
       position: 'absolute',
-      left: props.face.left,
-      top: props.face.top
+      transform: [
+        {translateX: props.face.left},
+        {translateY: props.face.top}
+      ]
     }
   }
 

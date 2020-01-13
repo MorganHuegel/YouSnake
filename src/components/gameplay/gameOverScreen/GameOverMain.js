@@ -15,7 +15,8 @@ export class GameOverMain extends React.Component {
   componentDidMount(){
     Animated.timing(this.state.top, {
       toValue: -45,
-      duration: 1000
+      duration: 1000,
+      useNativeDriver: true
     }).start()
   }
 
@@ -23,7 +24,8 @@ export class GameOverMain extends React.Component {
     if (!prevProps.slidingOutGameOver && this.props.slidingOutGameOver) {
       Animated.timing(this.state.top, {
         toValue: (-1 * this.screenHeight),
-        duration: 1000
+        duration: 1000,
+        useNativeDriver: true
       }).start()
     }
   }
@@ -34,8 +36,12 @@ export class GameOverMain extends React.Component {
         position: 'absolute',
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        top: this.state.top,
-        left: -25,
+        transform: [
+          {translateY: this.state.top},
+          {translateX: -25}
+        ],
+        // top: this.state.top,
+        // left: -25,
         height: this.screenHeight,
         width: this.props.mapDimensions.width + 50
       }

@@ -20,14 +20,16 @@ export class LogoMainOwenFaceContainer extends React.Component {
       Animated.parallel([
         ...this.state.faceAnimations.map((animValue, i) => {
           return Animated.sequence([
-            Animated.timing(animValue.bottom, {
+            Animated.timing(animValue.top, {
               delay: animValue.delay,
-              toValue: this.state.containerHeight * 1/6 + 40,
-              duration: 1000
+              toValue: (this.state.containerHeight * -1 * Math.pow(1/2, i+1) + 40),
+              duration: 1000,
+              useNativeDriver: true
             }),
-            Animated.timing(animValue.bottom, {
-              toValue: this.state.containerHeight * 1/6,
-              duration: 1000 - (i * 100)
+            Animated.timing(animValue.top, {
+              toValue: (this.state.containerHeight * -1 * Math.pow(1/2, i+1) + 80),
+              duration: 1000 - (i * 100),
+              useNativeDriver: true
             })
           ])
         })
@@ -44,7 +46,7 @@ export class LogoMainOwenFaceContainer extends React.Component {
     for (let i = 0; i < this.numberOfFaces; i++) {
       faceAnimations.push({
         delay: i * 200,
-        bottom: new Animated.Value(containerHeight * 1/6)
+        top: new Animated.Value(containerHeight * -1 * Math.pow(1/2, i+1) + 80)
       })
     }
 
@@ -67,7 +69,7 @@ export class LogoMainOwenFaceContainer extends React.Component {
   render () {
     let owenFaces = []
 
-    if (this.state.containerHeight && this.state.containerHeight) {
+    if (this.state.containerHeight && this.state.containerWidth) {
       for (let i = 0; i < this.numberOfFaces; i++) {
         const styleProps = {
           flex: 1,
@@ -75,9 +77,9 @@ export class LogoMainOwenFaceContainer extends React.Component {
           height: Math.pow(1/2, i) * this.state.containerHeight,
           backgroundColor: 'rgba(255, 255, 255, 0)',
           width: Math.pow(1/2, i) * this.state.containerHeight * (this.props.character.faceWidth / this.props.character.faceHeight), //width-to-height ratio
-          left: Math.pow(1/2, i+2) * this.state.containerWidth,
+          left: Math.pow(1/2, i+2) * this.state.containerWidth + (this.state.containerWidth * 1/12),
           zIndex: this.numberOfFaces - i,
-          bottom: this.state.faceAnimations[i].bottom
+          transform: [{translateY: this.state.faceAnimations[i].top}]
         }
 
         owenFaces.push(

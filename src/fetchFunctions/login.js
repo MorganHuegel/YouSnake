@@ -1,6 +1,4 @@
 import { SERVER_BASE_URL } from './config'
-// import DeviceInfo from 'react-native-device-info';
-
 
 export function fetchLogin (username, password) {
   return fetch(`${SERVER_BASE_URL}/users/login`, {
