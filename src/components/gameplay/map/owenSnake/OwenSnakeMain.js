@@ -58,10 +58,6 @@ export class OwenSnakeMain extends React.Component {
         this.checkForDeath()
       }, 100)
     }, 1000)
-
-    setInterval(() => {
-      console.log('LEFT: ', this.state.snakeBody[this.state.snakeBody.length - 1].left.__currentValue, 'TOP: ', this.state.snakeBody[this.state.snakeBody.length - 1].top.__currentValue)
-    }, 500)
   }
 
 
@@ -173,8 +169,8 @@ export class OwenSnakeMain extends React.Component {
   // When changing directions, this sets the delay for each face
   delayDirectionChange (direction) {
     const delayTimeMs = (direction === 'up' || direction === 'down') 
-      ? this.millisecondsPerPixel * this.props.cellDimensions.height - 15
-      : this.millisecondsPerPixel * this.props.cellDimensions.width - 15
+      ? this.millisecondsPerPixel * this.props.cellDimensions.height + 3
+      : this.millisecondsPerPixel * this.props.cellDimensions.width + 3
 
     return new Promise(resolve => setTimeout(resolve, delayTimeMs))
   }
