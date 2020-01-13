@@ -58,6 +58,10 @@ export class OwenSnakeMain extends React.Component {
         this.checkForDeath()
       }, 100)
     }, 1000)
+
+    setInterval(() => {
+      console.log('LEFT: ', this.state.snakeBody[this.state.snakeBody.length - 1].left.__currentValue, 'TOP: ', this.state.snakeBody[this.state.snakeBody.length - 1].top.__currentValue)
+    }, 500)
   }
 
 
@@ -155,22 +159,22 @@ export class OwenSnakeMain extends React.Component {
   }
 
 
-  // Used to break out of loop once all faces have changed direction
+  // Used to break out of loop once all faces have changed direction or Game is over
   validateSnakeBodyIndex(index){
     if (index >= this.state.snakeBody.length) {
       throw new Error('Break out of this loop; at the end of the snake')
     }
-    // if (!this.state.snakeBody[index].left instanceof Animated.Value) {
-    //   throw new Error('break out of this loop; owen has died')
-    // }
+    if (this.state.snakeBody[index].gameOver) {
+      throw new Error('break out of this loop; owen has died')
+    }
   }
 
 
   // When changing directions, this sets the delay for each face
   delayDirectionChange (direction) {
     const delayTimeMs = (direction === 'up' || direction === 'down') 
-      ? this.millisecondsPerPixel * this.props.cellDimensions.height - 27
-      : this.millisecondsPerPixel * this.props.cellDimensions.width - 27
+      ? this.millisecondsPerPixel * this.props.cellDimensions.height - 15
+      : this.millisecondsPerPixel * this.props.cellDimensions.width - 15
 
     return new Promise(resolve => setTimeout(resolve, delayTimeMs))
   }
@@ -190,7 +194,7 @@ export class OwenSnakeMain extends React.Component {
     // and Top value same as previous face, so that it falls in-line with preceeding faces
     if (snakeBodyIndex > 0) {
       this.state.snakeBody[snakeBodyIndex].left.setValue(
-        this.state.snakeBody[snakeBodyIndex - 1].left.__currentValue - this.props.cellDimensions.width
+        this.state.snakeBody[snakeBodyIndex - 1].left.__currentValue - this.props.cellDimensions.width + 1 // +1 is to compensate for timing
       )
       this.state.snakeBody[snakeBodyIndex].top.setValue(
         this.state.snakeBody[snakeBodyIndex - 1].top.__currentValue
@@ -201,21 +205,10 @@ export class OwenSnakeMain extends React.Component {
     const pxToGo = (this.props.mapDimensions.width - this.props.cellDimensions.width) - this.state.snakeBody[snakeBodyIndex].left.__currentValue
     const timeBeforeWall = this.millisecondsPerPixel * pxToGo
 
-    // if (snakeBodyIndex !== 0) {
-    //   this.state.snakeBody[snakeBodyIndex].top.setValue(
-    //     this.state.snakeBody[snakeBodyIndex - 1].top.__currentValue
-    //   )
-    // }
     // Stop the vertical movement if going horizontal
     this.state.snakeBody[snakeBodyIndex].top.stopAnimation()
     
     this.setNewDirection('right', snakeBodyIndex, () => {
-      // Add Listener for that face if it's not there already
-      if (!this.state.snakeBody[snakeBodyIndex].left.__currentValue) {
-        this.state.snakeBody[snakeBodyIndex].left.addListener(
-          ({value}) => this.state.snakeBody[snakeBodyIndex].left.__currentValue = value
-        )
-      }
       Animated.timing(this.state.snakeBody[snakeBodyIndex].left, {
         toValue: this.props.mapDimensions.width - this.props.cellDimensions.width,
         easing: Easing.linear,
@@ -231,7 +224,7 @@ export class OwenSnakeMain extends React.Component {
     // and Top value same as previous face, so that it falls in-line with preceeding faces
     if (snakeBodyIndex > 0) {
       this.state.snakeBody[snakeBodyIndex].left.setValue(
-        this.state.snakeBody[snakeBodyIndex - 1].left.__currentValue + this.props.cellDimensions.width
+        this.state.snakeBody[snakeBodyIndex - 1].left.__currentValue + this.props.cellDimensions.width - 1 // -1 is to compensate for timing
       )
       this.state.snakeBody[snakeBodyIndex].top.setValue(
         this.state.snakeBody[snakeBodyIndex - 1].top.__currentValue
@@ -242,21 +235,10 @@ export class OwenSnakeMain extends React.Component {
     const pxToGo = this.state.snakeBody[snakeBodyIndex].left.__currentValue
     const timeBeforeWall = this.millisecondsPerPixel * pxToGo
 
-    // if (snakeBodyIndex !== 0) {
-    //   this.state.snakeBody[snakeBodyIndex].top.setValue(
-      //     this.state.snakeBody[snakeBodyIndex - 1].top.__currentValue
-      //   )
-    // }
     // Stop the vertical movement if going horizontal
     this.state.snakeBody[snakeBodyIndex].top.stopAnimation()
 
     this.setNewDirection('left', snakeBodyIndex, () => {
-      // Add Listener for that face if it's not there already
-      if (!this.state.snakeBody[snakeBodyIndex].left.__currentValue) {
-        this.state.snakeBody[snakeBodyIndex].left.addListener(
-          ({value}) => this.state.snakeBody[snakeBodyIndex].left.__currentValue = value
-        )
-      }
       Animated.timing(this.state.snakeBody[snakeBodyIndex].left, {
         toValue: 0,
         easing: Easing.linear,
@@ -275,7 +257,7 @@ export class OwenSnakeMain extends React.Component {
         this.state.snakeBody[snakeBodyIndex - 1].left.__currentValue
       )
       this.state.snakeBody[snakeBodyIndex].top.setValue(
-        this.state.snakeBody[snakeBodyIndex - 1].top.__currentValue - this.props.cellDimensions.height
+        this.state.snakeBody[snakeBodyIndex - 1].top.__currentValue - this.props.cellDimensions.height + 1 // +1 is to compensate for timing
       )
     }
 
@@ -283,21 +265,10 @@ export class OwenSnakeMain extends React.Component {
     const pxToGo = (this.props.mapDimensions.height - this.props.cellDimensions.height) - this.state.snakeBody[snakeBodyIndex].top.__currentValue
     const timeBeforeWall = this.millisecondsPerPixel * pxToGo
 
-    // if (snakeBodyIndex !== 0) {
-    //   this.state.snakeBody[snakeBodyIndex].left.setValue(
-    //     this.state.snakeBody[snakeBodyIndex - 1].left.__currentValue
-    //   )
-    // }
     // Stop the horizontal movement if going vertical
     this.state.snakeBody[snakeBodyIndex].left.stopAnimation()
 
     this.setNewDirection('down', snakeBodyIndex, () => {
-      // Add Listener for that face if it's not there already
-      if (!this.state.snakeBody[snakeBodyIndex].top.__currentValue) {
-        this.state.snakeBody[snakeBodyIndex].top.addListener(
-          ({value}) => this.state.snakeBody[snakeBodyIndex].top.__currentValue = value
-        )
-      }
       Animated.timing(this.state.snakeBody[snakeBodyIndex].top, {
         toValue: this.props.mapDimensions.height - this.props.cellDimensions.height,
         easing: Easing.linear,
@@ -316,7 +287,7 @@ export class OwenSnakeMain extends React.Component {
         this.state.snakeBody[snakeBodyIndex - 1].left.__currentValue
       )
       this.state.snakeBody[snakeBodyIndex].top.setValue(
-        this.state.snakeBody[snakeBodyIndex - 1].top.__currentValue + this.props.cellDimensions.height
+        this.state.snakeBody[snakeBodyIndex - 1].top.__currentValue + this.props.cellDimensions.height - 1 // -1 is to compensate for timing
       )
     }
 
@@ -324,21 +295,10 @@ export class OwenSnakeMain extends React.Component {
     const pxToGo = this.state.snakeBody[snakeBodyIndex].top.__currentValue
     const timeBeforeWall = this.millisecondsPerPixel * pxToGo
 
-    // if (snakeBodyIndex !== 0) {
-    //   this.state.snakeBody[snakeBodyIndex].left.setValue(
-    //     this.state.snakeBody[snakeBodyIndex - 1].left.__currentValue
-    //   )
-    // }
     // Stop the horizontal movement if going vertical
     this.state.snakeBody[snakeBodyIndex].left.stopAnimation()
 
     this.setNewDirection('up', snakeBodyIndex, () => {
-      // Add Listener for that face if it's not there already
-      if (!this.state.snakeBody[snakeBodyIndex].top.__currentValue) {
-        this.state.snakeBody[snakeBodyIndex].top.addListener(
-          ({value}) => this.state.snakeBody[snakeBodyIndex].top.__currentValue = value
-        )
-      }
       Animated.timing(this.state.snakeBody[snakeBodyIndex].top, {
         toValue: 0,
         easing: Easing.linear,
@@ -352,7 +312,8 @@ export class OwenSnakeMain extends React.Component {
   // When snake dies, pause animations and setToDead, which causes high scores screen
   owenDies = () => {
     clearInterval(this.checkForDieInterval)
-    this.state.snakeBody.forEach(face => {
+    this.state.snakeBody.forEach( (face, index) => {
+      if (index !== 0) face.gameOver = true
       face.left.stopAnimation()
       face.top.stopAnimation()
     })
@@ -398,6 +359,24 @@ export class OwenSnakeMain extends React.Component {
     })
 
     this.setState({snakeBody: updatedSnakeBody}, () => {
+      //Initialize animation so we can add Listener
+      Animated.timing(this.state.snakeBody[updatedSnakeBody.length - 1].left, {
+        toValue: newLeft, 
+        duration: 1,
+        useNativeDriver: true
+      }).start()
+      Animated.timing(this.state.snakeBody[updatedSnakeBody.length - 1].top, {
+        toValue: newTop, 
+        duration: 1,
+        useNativeDriver: true
+      }).start()
+      this.state.snakeBody[updatedSnakeBody.length - 1].left.addListener(
+        ({value}) => this.state.snakeBody[updatedSnakeBody.length - 1].left.__currentValue = value
+      )
+      this.state.snakeBody[updatedSnakeBody.length - 1].top.addListener(
+        ({value}) => this.state.snakeBody[updatedSnakeBody.length - 1].top.__currentValue = value
+      )
+
       // After adding face to state, make it start moving!
       switch(updatedSnakeBody[updatedSnakeBody.length - 1].moving){
         case('up'):
